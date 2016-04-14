@@ -10,7 +10,7 @@ class MarkovChain:
         self.d = cmudict.dict()
 
     def train(self,states):
-        self.states = states
+        self.states = states.split()
         fdist = nltk.FreqDist(states)
         cfd = nltk.ConditionalFreqDist(nltk.bigrams(states))
         for s in states:
@@ -31,19 +31,25 @@ class MarkovChain:
         	if haiku_line_count == 0:
             	if syl_count == 5:
                 	lines.append(word)
+                	lines.append("\n")
                 	haiku_line_count += 1
         	elif haiku_line_count == 1:
             	if syl_count == 12:
                 	lines.append(word)
+                	lines.append("\n")
                 	haiku_line_count += 1
         	else:
             	if syl_count == 17:
                 	lines.append(word)
                 	haiku_line_count += 1
+        return lines
+            
 
     # Get some start probabilities and instigate a sentence with them
     # incorporate random choice using numpy, that'll end the infinite loop
-    
+    def generate(self):
+    	generated_text = []
+    	seed = self.states
         
 
 training_set = nltk.corpus.brown.words(categories='news')[:100]
