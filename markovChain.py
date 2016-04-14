@@ -43,23 +43,10 @@ class MarkovChain:
 
     # Get some start probabilities and instigate a sentence with them
     # incorporate random choice using numpy, that'll end the infinite loop
-    def generate(self):
-        # Should do seed = random.randint(0,len(self.states))
-        # seed, next = self.states[seed], self.states[seed+1]
-        # Gets first bigram
-        seed = self.states[random.randint(0,len(self.states))]
-        syl_cound = 0
-        word_count = 0
-        haiku_line_count = 0
-        lines = []
-        while l <= length:
-            seed = choice((list(self.transitionMatrix[seed].keys())), 1, list(self.transitionMatrix[seed].values()))
-            print(seed)
-        return ' '.join(generated_states)
+    
         
 
 training_set = nltk.corpus.brown.words(categories='news')[:100]
 training_set = [w.lower() for w in training_set]
 mc = MarkovChain()
-mc.train(training_set)
-mc.generate(12)
+mc.haiku_search('sand scatters the beach waves crash on the sandy shore blue watter shimmers
