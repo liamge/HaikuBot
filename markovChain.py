@@ -1,58 +1,62 @@
 __author__ = 'liamgeron'
-import nltk
-import random
-from numpy.random import choice
-from nltk.corpus import cmudict
+from nltk import FreqDist, ConditionalFreqDist, bigrams
+from numpy import cumsum
+from numpy.random import rand
+from nltk.corpus import brown
+import itertools
+
+
+""" TO DO:
+    - Switch to bigrams
+    - Maybe ditch the haiku idea
+        - If not move on to practical solution w/r/t syllable structure
+    - Specify .join() for punctuation (i.e. periods don't get a space)
+"""
 
 class MarkovChain:
     def __init__(self):
         self.transitionMatrix = {}
-        self.d = cmudict.dict()
+        self.start_states = {}
 
     def train(self,states):
-        self.states = states.split()
-        fdist = nltk.FreqDist(states)
-        cfd = nltk.ConditionalFreqDist(nltk.bigrams(states))
+        self.states = states
+        fdist = FreqDist(states)
+        cfd = ConditionalFreqDist(bigrams(states))
         for s in states:
             self.transitionMatrix[s] = {}
             for a in states:
-                self.transitionMatrix[s][a] = cfd[s][a] / fdist[s]
-                
-    def syllables(self,word):
-    	return [len(list(y for y in x if isdigit(y[-1]))) for x in self.d[word.lower()]]
-    	
-    def haiku_search(self, words):
-    	syl_count = 0
-    	word_count = 0
-    	haiku_line_count = 0
-    	lines = []
-    	for word in words:
-        	syl_count += self.syllables(word)
-        	if haiku_line_count == 0:
-            	if syl_count == 5:
-                	lines.append(word)
-                	lines.append("\n")
-                	haiku_line_count += 1
-        	elif haiku_line_count == 1:
-            	if syl_count == 12:
-                	lines.append(word)
-                	lines.append("\n")
-                	haiku_line_count += 1
-        	else:
-            	if syl_count == 17:
-                	lines.append(word)
-                	haiku_line_count += 1
-        return lines
-            
+                self.transitionMatrix[s][a] = float(cfd[s][a] / fdist[s])
+
+
+    def weightedChoice(self, objects, weights):
+        cs = cumsum(weights)
+        idx = sum(cs < rand())
+        return objects[idx]
+
 
     # Get some start probabilities and instigate a sentence with them
-    # incorporate random choice using numpy, that'll end the infinite loop
     def generate(self):
-    	generated_text = []
-    	seed = self.states
+        generated_text = []
+        seed = "START"
+        while seed != "END":
+            choiceKeys = list(self.transitionMatrix[seed].keys())
+            choiceWeights = list(self.transitionMatrix[seed].values())
+            nextSeed = self.weightedChoice(choiceKeys,choiceWeights)
+            if nextSeed == "END":
+                break
+            else:
+                generated_text.append(nextSeed)
+                seed = nextSeed
+
+        return ' '.join(generated_text)
+    		
         
 
-training_set = nltk.corpus.brown.words(categories='news')[:100]
-training_set = [w.lower() for w in training_set]
+training_set = list(brown.sents(categories='fiction')[:100])
+for sent in training_set:
+    sent.append("END")
+    sent.insert(0,"START")
+training_set = list(itertools.chain(*training_set))
 mc = MarkovChain()
-mc.haiku_search('sand scatters the beach waves crash on the sandy shore blue watter shimmers
+mc.train(training_set)
+print(mc.generate())
