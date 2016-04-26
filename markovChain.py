@@ -5,7 +5,6 @@ from numpy.random import rand
 from nltk.corpus import brown
 import itertools
 
-
 """ TO DO:
     - Switch to bigrams
     - Maybe ditch the haiku idea
@@ -34,7 +33,7 @@ class MarkovChain:
         return objects[idx]
 
 
-    # Get some start probabilities and instigate a sentence with them
+    # Get some start probabilities and initiate a sentence with them
     def generate(self):
         generated_text = []
         seed = "START"
@@ -49,10 +48,9 @@ class MarkovChain:
                 seed = nextSeed
 
         return ' '.join(generated_text)
-    		
         
 
-training_set = list(brown.sents(categories='fiction')[:100])
+training_set = list(brown.sents(categories='fiction')[:300])
 for sent in training_set:
     sent.append("END")
     sent.insert(0,"START")
