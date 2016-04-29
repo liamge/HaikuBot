@@ -49,6 +49,11 @@ class MarkovChain:
 
         return ' '.join(generated_text)
         
+"""
+For Training Model:
+    - Input arrays of sentences that begin with "START" and end with "END"
+    - e.g. [['START', 'This', 'is', 'a', 'sentence', 'END']]
+"""
 
 training_set = list(brown.sents(categories='fiction')[:300])
 for sent in training_set:
