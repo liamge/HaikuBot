@@ -7,8 +7,6 @@ import itertools
 
 """ TO DO:
     - Switch to bigrams
-    - Maybe ditch the haiku idea
-        - If not move on to practical solution w/r/t syllable structure
     - Specify .join() for punctuation (i.e. periods don't get a space)
 """
 
