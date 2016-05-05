@@ -55,7 +55,7 @@ For Training Model:
     - e.g. [['START', 'This', 'is', 'a', 'sentence', 'END']]
 """
 
-training_set = list(brown.sents(categories='fiction')[:300])
+training_set = list(brown.sents(categories='news')[:300])
 for sent in training_set:
     sent.append("END")
     sent.insert(0,"START")

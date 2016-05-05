@@ -4,6 +4,7 @@ from numpy import cumsum
 from numpy.random import rand
 from nltk.corpus import brown, cmudict
 import itertools
+import pickle
 
 
 """ TO DO:
@@ -78,4 +79,4 @@ for sent in training_set:
 training_set = list(itertools.chain(*training_set))
 mc = MarkovChain()
 mc.train(training_set)
-print(mc.generate())
+pickle.dump(mc.transitionMatrix, open('save.p','wb'))
